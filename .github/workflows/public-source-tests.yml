@@ -1,0 +1,54 @@
+name: Public PS7 Git source tests
+on:
+  push:
+    paths:
+      - 'tools/**'
+      - 'tests/**'
+      - 'config/git-source-v1.release.json'
+      - '.github/workflows/public-source-tests.yml'
+  pull_request:
+    paths:
+      - 'tools/**'
+      - 'tests/**'
+      - 'config/git-source-v1.release.json'
+      - '.github/workflows/public-source-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-source-contracts:
+    name: Offline providers and PS7 / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate provider SHA-256 pins
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $release = Get-Content ./config/git-source-v1.release.json -Raw | ConvertFrom-Json
+          if ($release.status -ne 'INTEGRATED_ON_DEMAND') { throw 'RELEASE_STATUS_INVALID' }
+          foreach ($entry in $release.provider.files_sha256.PSObject.Properties) {
+            $hash = (Get-FileHash -LiteralPath $entry.Name -Algorithm SHA256).Hash.ToLowerInvariant()
+            if ($hash -cne $entry.Value) { throw "PROVIDER_SHA256_MISMATCH: $($entry.Name)" }
+          }
+      - name: Python provider unit tests (offline)
+        shell: pwsh
+        run: |
+          python --version
+          git --version
+          python -B -m unittest discover -s tests -p 'test_mainalto_*_provider.py' -v
+          if ($LASTEXITCODE -ne 0) { throw 'PROVIDER_TEST_FAILURE' }
+      - name: PowerShell facade and correlated-cycle tests (offline)
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          foreach ($test in @('Test-GitPublishFacade.ps1','Test-GitSourceFacades.ps1','Test-GitSourceCycle.ps1')) {
+            & pwsh -NoProfile -File (Join-Path ./tests $test)
+            if ($LASTEXITCODE -ne 0) { throw "FACADE_TEST_FAILURE: $test" }
+          }

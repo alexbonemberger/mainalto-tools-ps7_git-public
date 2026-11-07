@@ -1,0 +1,22 @@
+{
+  "schema_version": "mainalto.git-source-release/1",
+  "status": "INTEGRATED_ON_DEMAND",
+  "distribution": "PUBLIC_PORTABLE_SOURCE_ONLY",
+  "repository": "alexbonemberger/mainalto-tools-ps7_git-public",
+  "provider": {
+    "repository": "alexbonemberger/mainalto-tools-ps7_git-public",
+    "files_sha256": {
+      "tools/mainalto_repo_create_provider.py": "4c1621bfee1484c2f40c3c2ac68c34599dd10321d83a4644cee752c7a1683557",
+      "tools/mainalto_git_changes_provider.py": "70557f77a88113c6994531645040a15935b5caaf655119793bb66d03db3e2230",
+      "tools/mainalto_git_publish_provider.py": "3b6ec755ace3215ac695d268791de770e4495db88b8253704a90bf36417a3819"
+    }
+  },
+  "boundaries": {
+    "no_worker": true,
+    "no_scheduler": true,
+    "no_live_authority": true,
+    "no_credentials": true,
+    "no_private_binding": true,
+    "git_push_only_on_explicit_execute": true
+  }
+}
