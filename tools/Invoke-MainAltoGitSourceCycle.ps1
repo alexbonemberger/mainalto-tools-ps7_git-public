@@ -25,7 +25,7 @@ $result=[ordered]@{
 }
 
 function Invoke-Child([string]$File,[string[]]$ChildArguments,[string]$ExpectedSchema) {
-    $pwsh=(Get-Command pwsh -CommandType Application -ErrorAction Stop).Source
+    $pwsh=(Get-Command pwsh -CommandType Application -ErrorAction Stop | Select-Object -First 1).Source
     $lines=@(& $pwsh -NoProfile -File $File @ChildArguments)
     $code=$LASTEXITCODE
     if ($lines.Count -ne 1) {throw 'CHILD_STDOUT_NOT_EXACTLY_ONE_JSON'}

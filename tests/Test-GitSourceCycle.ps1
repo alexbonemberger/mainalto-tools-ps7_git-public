@@ -5,7 +5,7 @@ $fakeTools=Join-Path $tmp 'tools-source'
 $fakeProvider=Join-Path $tmp 'provider-source'
 $checkout=Join-Path $tmp 'checkout'
 $manifestFile=Join-Path $tmp 'change-set.json'
-$pwsh=(Get-Command pwsh -CommandType Application -ErrorAction Stop).Source
+$pwsh=(Get-Command pwsh -CommandType Application -ErrorAction Stop | Select-Object -First 1).Source
 $sourceRoot=Split-Path -Parent $PSScriptRoot
 New-Item -ItemType Directory -Path (Join-Path $fakeTools 'tools') -Force | Out-Null
 New-Item -ItemType Directory -Path (Join-Path $fakeTools 'config') -Force | Out-Null

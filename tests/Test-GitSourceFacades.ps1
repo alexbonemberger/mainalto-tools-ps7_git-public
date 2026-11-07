@@ -1,7 +1,7 @@
 # Windows disposable smoke test: the only effects are files under RUNNER_TEMP.
 $ErrorActionPreference='Stop'
 $toolsRoot=Split-Path -Parent $PSScriptRoot
-$pwsh=(Get-Command pwsh -CommandType Application -ErrorAction Stop).Source
+$pwsh=(Get-Command pwsh -CommandType Application -ErrorAction Stop | Select-Object -First 1).Source
 $tmpRoot=Join-Path ([IO.Path]::GetTempPath()) ([guid]::NewGuid().ToString('N'))
 $providerTools=Join-Path $tmpRoot 'provider/tools'
 New-Item -Path $providerTools -ItemType Directory -Force | Out-Null
