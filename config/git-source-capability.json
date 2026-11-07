@@ -1,0 +1,54 @@
+{
+  "schema_version": "mainalto.public-git-source-capability/1",
+  "id": "git-source-cycle-v1",
+  "status": "SOURCE_AVAILABLE_ON_DEMAND_NO_LIVE",
+  "repository": "alexbonemberger/mainalto-tools-ps7_git-public",
+  "entrypoint": "tools/Invoke-MainAltoGitSourceCycle.ps1",
+  "operations": {
+    "source_cycle": [
+      "Inspect",
+      "Execute"
+    ],
+    "change_set": [
+      "Plan",
+      "Commit"
+    ],
+    "publish": [
+      "Inspect",
+      "Publish"
+    ],
+    "repo_create": [
+      "Inspect",
+      "Create (private only)"
+    ]
+  },
+  "prerequisites": [
+    "PowerShell 7",
+    "Python 3.12+",
+    "Git",
+    "existing Git checkout and explicit origin",
+    "GitHub authentication only for effects"
+  ],
+  "provider_root": ".",
+  "provider_release_lock": "config/git-source-v1.release.json",
+  "contract_schemas": [
+    "mainalto.git-change-set/1",
+    "mainalto.git-source-cycle/1",
+    "mainalto.git-publish-observation/1"
+  ],
+  "testing": {
+    "workflow": ".github/workflows/public-source-tests.yml",
+    "safety": "OFFLINE_DISPOSABLE_NO_REMOTE_PUSH"
+  },
+  "private_exclusions": [
+    "MainRoot binding",
+    "authority",
+    "installed runtime",
+    "queues",
+    "receipts",
+    "Chess",
+    "UIA",
+    "credentials"
+  ],
+  "effect_policy": "NO_IMPLICIT_REMOTE_WRITE_EXPLICIT_EXECUTE_ONLY_UNKNOWN_RECONCILE_READ_ONLY"
+}

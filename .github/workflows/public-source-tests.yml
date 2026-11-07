@@ -1,16 +1,21 @@
 name: Public PS7 Git source tests
 on:
   push:
+    branches: [main]
     paths:
       - 'tools/**'
       - 'tests/**'
       - 'config/git-source-v1.release.json'
+      - 'config/git-source-capability.json'
+      - '.gitattributes'
       - '.github/workflows/public-source-tests.yml'
   pull_request:
     paths:
       - 'tools/**'
       - 'tests/**'
       - 'config/git-source-v1.release.json'
+      - 'config/git-source-capability.json'
+      - '.gitattributes'
       - '.github/workflows/public-source-tests.yml'
   workflow_dispatch:
 
