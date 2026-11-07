@@ -1,0 +1,30 @@
+name: PS7 Git public runner smoke
+
+on:
+  push:
+    paths:
+      - '.github/workflows/ps7-git-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: 'PS7 + Git / ${{ matrix.os }}'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - name: Verify PowerShell 7 and Git
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if ($PSVersionTable.PSVersion.Major -lt 7) { throw 'PS7_REQUIRED' }
+          $gitVersion = git --version
+          if ($LASTEXITCODE -ne 0) { throw 'GIT_UNAVAILABLE' }
+          Write-Output ('PS7_GIT_SMOKE=PASS')
+          Write-Output ('PS_VERSION=' + $PSVersionTable.PSVersion.ToString())
+          Write-Output ('GIT_VERSION=' + $gitVersion)
